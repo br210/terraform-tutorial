@@ -32,6 +32,7 @@ resource "aws_instance" "frontend" {
   }
 
   depends_on        = ["aws_instance.backend"]
+  count             = 1
   availability_zone = "${data.aws_availability_zones.us-east-1.names[count.index]}"
   ami               = "ami-66506c1c"
   instance_type     = "t2.micro"
@@ -74,7 +75,7 @@ resource "aws_instance" "west_backend" {
 }
 
 output "frontend_ip" {
-  value = "${aws_instance.frontend.public_ip}"
+  value = "${aws_instance.frontend.*.public_ip}"
 }
 
 output "backend_ips" {
