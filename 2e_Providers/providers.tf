@@ -1,12 +1,12 @@
 provider "aws" {
-  access_key = "ACCESS_KEY"
-  secret_key = "SECRET_KEY"
+  access_key = "AKIAUQ233CKGZLIJ4SHT"
+  secret_key = "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"
   region     = "us-east-1"
 }
 
 provider "aws" {
-  access_key = "ACCESS_KEY"
-  secret_key = "SECRET_KEY"
+  access_key = "AKIAUQ233CKGZLIJ4SHT"
+  secret_key = "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"
   alias      = "us-west-1"
   region     = "us-west-1"
 }
