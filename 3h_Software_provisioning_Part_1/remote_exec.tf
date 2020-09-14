@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 resource "aws_instance" "frontend" {
-  count                  = 1
-  availability_zone      = "${var.us-east-zones[count.index]}"
+  #count                  = 1
+  availability_zone      = "us-east-1a"
   ami                    = "ami-66506c1c"
   instance_type          = "t2.micro"
   key_name               = "${var.key_name}"
@@ -18,7 +18,7 @@ resource "aws_instance" "frontend" {
     user        = "ubuntu"
     type        = "ssh"
     private_key = "${file(var.pvt_key)}"
-    host        = "${aws_instance.frontend.*.public_ip}"
+    host        = "${aws_instance.frontend.public_ip}"
   }
 
   provisioner "file" {
