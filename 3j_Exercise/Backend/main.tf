@@ -21,6 +21,7 @@ resource "aws_instance" "backend" {
       user        = "ubuntu"
       type        = "ssh"
       private_key = "${file(var.pvt_key)}"
+      host        = "${aws_instance.backend.public_ip}"
     }
   }
 }

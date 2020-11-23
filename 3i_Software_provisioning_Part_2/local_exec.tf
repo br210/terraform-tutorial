@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "backend" {
-  availability_zone      = "${var.us-east-zones[count.index]}"
+  availability_zone      = "us-east-1a"
   ami                    = "ami-66506c1c"
   instance_type          = "t2.micro"
   key_name               = "${var.key_name}"
@@ -18,6 +18,7 @@ resource "aws_instance" "backend" {
       user        = "ubuntu"
       type        = "ssh"
       private_key = "${file(var.pvt_key)}"
+      host        = "${aws_instance.backend.public_ip}"
     }
   }
 }

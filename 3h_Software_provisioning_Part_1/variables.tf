@@ -1,9 +1,9 @@
 variable "key_name" {
-  default = "sept"
+  default = "ICON"
 }
 
 variable "pvt_key" {
-  default = "/root/.ssh/sept.pem"
+  default = "/root/.ssh/ICON.pem"
 }
 
 variable "us-east-zones" {

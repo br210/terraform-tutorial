@@ -20,6 +20,7 @@ resource "aws_instance" "frontend" {
     user        = "ubuntu"
     type        = "ssh"
     private_key = "${file(var.pvt_key)}"
+    host        = "${aws_instance.frontend.public_ip}"
   }
 
   provisioner "file" {

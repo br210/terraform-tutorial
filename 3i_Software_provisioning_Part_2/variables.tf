@@ -1,9 +1,9 @@
 variable "key_name" {
-  default = "stefan-personal-aws"
+  default = "ICON"
 }
 
 variable "pvt_key" {
-  default = "/home/stefan/.ssh/stefan-personal-aws.pem"
+  default = "/root/.ssh/ICON.pem"
 }
 
 variable "us-east-zones" {
@@ -11,5 +11,5 @@ variable "us-east-zones" {
 }
 
 variable "sg-id" {
-  default = "sg-4e1b7b39"
+  default = "sg-01e746d9e255c85b3"
 }
