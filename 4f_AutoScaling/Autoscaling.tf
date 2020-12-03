@@ -20,6 +20,7 @@ data "aws_security_group" "default" {
 
 data "aws_ami" "amazon_linux" {
   most_recent = true
+  owners      = ["amazon"]
 
   filter {
     name = "name"
@@ -75,11 +76,11 @@ module "example_asg" {
 
   # Auto scaling group
   asg_name                  = "example-asg"
-  vpc_zone_identifier       = ["${data.aws_subnet_ids.all.ids}"]
+  vpc_zone_identifier       = data.aws_subnet_ids.all.ids
   health_check_type         = "EC2"
   min_size                  = 0
   max_size                  = 1
-  desired_capacity          = 1
+  desired_capacity          = 0
   wait_for_capacity_timeout = 0
 
   tags = [
@@ -104,8 +105,8 @@ module "elb" {
 
   name = "elb-example"
 
-  subnets         = ["${data.aws_subnet_ids.all.ids}"]
-  security_groups = ["${data.aws_security_group.default.id}"]
+  subnets         = data.aws_subnet_ids.all.ids
+  security_groups = [data.aws_security_group.default.id]
   internal        = false
 
   listener = [
@@ -117,15 +118,13 @@ module "elb" {
     },
   ]
 
-  health_check = [
-    {
-      target              = "HTTP:80/"
-      interval            = 30
-      healthy_threshold   = 2
-      unhealthy_threshold = 2
-      timeout             = 5
-    },
-  ]
+  health_check = {
+    target              = "HTTP:80/"
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+  }
 
   tags = {
     Owner       = "user"
