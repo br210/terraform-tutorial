@@ -30,8 +30,8 @@ module "elb" {
   source = "terraform-aws-modules/elb/aws"
 
   name = "elb-example"
-
-  subnets         = ["${data.aws_subnet_ids.all.ids}"]
+ 
+  subnets         = data.aws_subnet_ids.all.ids
   security_groups = ["${data.aws_security_group.default.id}"]
   internal        = false
 
@@ -49,18 +49,16 @@ module "elb" {
       lb_protocol       = "HTTP"
     },
   ]
+  
+ health_check = {
+    target              = "HTTP:80/"
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+  }
 
-  health_check = [
-    {
-      target              = "HTTP:80/"
-      interval            = 30
-      healthy_threshold   = 2
-      unhealthy_threshold = 2
-      timeout             = 5
-    },
-  ]
-
-  // Uncomment this section and set correct bucket name to enable access logging
+// Uncomment this section and set correct bucket name to enable access logging
   //  access_logs = [
   //    {
   //      bucket = "my-access-logs-bucket"
@@ -73,7 +71,7 @@ module "elb" {
   }
   # ELB attachments
   number_of_instances = "${var.number_of_instances}"
-  instances           = ["${module.ec2_instances.id}"]
+  instances           =  module.ec2_instances.id
 }
 
 ################
@@ -87,8 +85,8 @@ module "ec2_instances" {
   name                        = "my-app"
   ami                         = "ami-ebd02392"
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = ["${data.aws_security_group.default.id}"]
-  subnet_id                   = "${element(data.aws_subnet_ids.all.ids, 0)}"
+  vpc_security_group_ids      = [data.aws_security_group.default.id]
+  subnet_id                   = element(tolist(data.aws_subnet_ids.all.ids), 0)
   associate_public_ip_address = true
 }
 
@@ -122,11 +120,11 @@ resource "aws_lb" "front_end" {
   load_balancer_type = "application"
   security_groups    = ["${data.aws_security_group.default.id}"]
 
-  subnets = ["${data.aws_subnet_ids.all.ids}"]
+  subnets = data.aws_subnet_ids.all.ids
 
   enable_deletion_protection = false
 
-  tags {
+  tags = {
     Environment = "production"
   }
 }
